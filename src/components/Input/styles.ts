@@ -14,11 +14,16 @@ export const Container = styled.div<ContainerProps>`
   color: #666360;
   display: flex;
   align-items: center;
+
+  svg {
+    margin-right: 16px;
+  }
+
   & + div {
     margin-top: 8px;
   }
-  ${props =>
-    props.isFocused &&
+  ${propriedades =>
+    propriedades.isFocused &&
     css`
       color: #ff9000;
       border-color: #ff9000;
@@ -37,9 +42,6 @@ export const Container = styled.div<ContainerProps>`
     color: #f4ede8;
     &::placeholder {
       color: #666360;
-    }
-    svg {
-      margin-right: 16px;
     }
   }
 `;
