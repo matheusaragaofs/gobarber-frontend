@@ -12,6 +12,7 @@ const Input: React.FC<InputProps> = ({ icon: Icon, ...rest }) => (
   <Container>
     {Icon && <Icon size={20} />}
     <input {...rest} />
+    {/* input que possui todas as propriedades */}
   </Container>
 );
 export default Input;
