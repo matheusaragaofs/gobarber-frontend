@@ -2,7 +2,7 @@ import React, { ButtonHTMLAttributes } from 'react';
 
 import { Container } from './styles';
 
-type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement>;
+type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement>; // tipagens de objetos que são compostas de objetos
 
 const Button: React.FC<ButtonProps> = ({ children, ...rest }) => {
   return (
