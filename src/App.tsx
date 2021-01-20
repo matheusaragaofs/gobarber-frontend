@@ -5,7 +5,7 @@ import SignIn from './pages/SignIn/index';
 
 const App: React.FunctionComponent = () => (
   <>
-    <SignUp />
+    <SignIn />
     <GlobalStyle />
   </>
 );
