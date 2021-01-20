@@ -1,11 +1,15 @@
 import React from 'react';
 import GlobalStyle from './styles/global';
-import SignUp from './pages/SignUp/index';
+// import SignUp from './pages/SignUp/index';
 import SignIn from './pages/SignIn/index';
+import { AuthProvider } from './context/AuthContext';
 
 const App: React.FunctionComponent = () => (
   <>
-    <SignIn />
+    <AuthProvider>
+      <SignIn />
+    </AuthProvider>
+
     <GlobalStyle />
   </>
 );
