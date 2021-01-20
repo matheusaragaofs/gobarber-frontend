@@ -11,8 +11,6 @@ import { FiAlertCircle } from 'react-icons/fi';
 import { useField } from '@unform/core'; // api é igual tanto pra web quanto pra mobile
 import { Container, Error } from './styles';
 
-import Tooltip from '../Tooltip/index';
-
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string;
   icon?: React.ComponentType<IconBaseProps>; // o incon recebido é um componente, usa ComponentType que é quando eu quero receber um componente como uma propriedade
@@ -54,7 +52,8 @@ const Input: React.FC<InputProps> = ({ name, icon: Icon, ...rest }) => {
         {...rest}
       />
       {error && (
-        <Error>
+        <Error title={error}>
+          {/* esse ícone abaixo é o children */}
           <FiAlertCircle color="#c53030" size={20} />
         </Error>
       )}
