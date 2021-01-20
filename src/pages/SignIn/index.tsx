@@ -21,7 +21,8 @@ interface SignInFormData {
 const SignIn: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
 
-  const { signIn } = useContext(AuthContext);
+  const { signIn, user } = useContext(AuthContext);
+  console.log(user);
   // essa função vai receber os dados do meu formulário
   const handleSubmit = useCallback(
     async (data: SignInFormData) => {
@@ -39,9 +40,8 @@ const SignIn: React.FC = () => {
         await schema.validate(data, {
           abortEarly: false, // retornar todos os erros de uma vez só
         });
-        signIn({ email: data.email, password: data.password });
 
-        console.log(data);
+        signIn({ email: data.email, password: data.password });
       } catch (err) {
         const string = JSON.stringify(err);
 
@@ -50,7 +50,6 @@ const SignIn: React.FC = () => {
         const errors = getValidationErrors(errorParsed);
 
         formRef.current?.setErrors(errors);
-        console.log(errorParsed);
       }
     },
     [signIn],

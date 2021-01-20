@@ -34,6 +34,16 @@
       "prettier/prettier": "error",
       "no-unused-expressions":"off",
       "react/jsx-one-expression-per-line":"off",
+      "@typescript-eslint/ban-types": [
+        "error",
+        {
+          "extendDefaults": true,
+          "types": {
+            "object": false,
+            "{}": false
+          }
+        }
+      ],
       "react-hooks/rules-of-hooks": "error",
       "react/prop-types":"off",
       "react/jsx-props-no-spreading":"off",
