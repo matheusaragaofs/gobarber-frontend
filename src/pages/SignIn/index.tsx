@@ -1,10 +1,10 @@
 import React, { useRef, useCallback } from 'react';
 import { FiLogIn, FiMail, FiLock } from 'react-icons/fi';
-
 import { Form } from '@unform/web';
 import { FormHandles } from '@unform/core';
 import * as Yup from 'yup';
-import { useAuth } from '../../hooks/AuthContext';
+import { useToast } from '../../hooks/toast';
+import { useAuth } from '../../hooks/auth';
 import getValidationErrors from '../../utils/getValidationErrors';
 
 import logoImg from '../../assets/logo.svg';
@@ -20,6 +20,8 @@ interface SignInFormData {
 
 const SignIn: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
+
+  const { addToast } = useToast();
 
   const { signIn } = useAuth();
   // essa função vai receber os dados do meu formulário
@@ -40,7 +42,7 @@ const SignIn: React.FC = () => {
           abortEarly: false, // retornar todos os erros de uma vez só
         });
 
-        signIn({ email: data.email, password: data.password });
+        await signIn({ email: data.email, password: data.password });
       } catch (err) {
         const string = JSON.stringify(err);
 
@@ -52,10 +54,15 @@ const SignIn: React.FC = () => {
           formRef.current?.setErrors(errors);
         }
 
-        // else:  disparar um toast
+        addToast({
+          type: 'error',
+          title: 'Erro na autenticação',
+          description:
+            'Ocorreu um erro ao fazer o login, cheque as credenciais',
+        });
       }
     },
-    [signIn],
+    [signIn, addToast],
   );
 
   return (

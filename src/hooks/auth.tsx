@@ -55,7 +55,8 @@ const AuthProvider: React.FC = ({ children }) => {
 };
 
 function useAuth(): AuthContextData {
-  const context = useContext(AuthContext);
+  // criando meu próprio hook
+  const context = useContext(AuthContext); // ele vai retornar nosso contexto
 
   if (!context) {
     // se o usuário utilizar o useAuth sem passar o AuthProvider por volta dele, o contexto não vai existir

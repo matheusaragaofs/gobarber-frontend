@@ -2,16 +2,14 @@ import React from 'react';
 import GlobalStyle from './styles/global';
 // import SignUp from './pages/SignUp/index';
 import SignIn from './pages/SignIn/index';
-import ToastContainer from './components/ToatsContainer/index';
-import { AuthProvider } from './hooks/AuthContext';
+import AppProvider from './hooks/index';
 
 const App: React.FunctionComponent = () => (
   <>
-    <AuthProvider>
+    <AppProvider>
       <SignIn />
-    </AuthProvider>
+    </AppProvider>
 
-    <ToastContainer />
     <GlobalStyle />
   </>
 );
