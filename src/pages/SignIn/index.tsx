@@ -46,9 +46,13 @@ const SignIn: React.FC = () => {
 
         const errorParsed = JSON.parse(string);
 
-        const errors = getValidationErrors(errorParsed);
+        if (errorParsed instanceof Yup.ValidationError) {
+          const errors = getValidationErrors(errorParsed);
 
-        formRef.current?.setErrors(errors);
+          formRef.current?.setErrors(errors);
+        }
+
+        // else:  disparar um toast
       }
     },
     [signIn],
