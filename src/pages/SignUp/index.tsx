@@ -7,11 +7,11 @@ import * as Yup from 'yup';
 import { FormHandles } from '@unform/core';
 import api from '../../services/api';
 import logoImg from '../../assets/logo.svg';
+import getValidationErrors from '../../utils/getValidationErrors';
 
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 import { useToast } from '../../hooks/toast';
-import getValidationErrors from '../../utils/getValidationErrors';
 
 import { Container, Content, AnimationContainer, Background } from './styles';
 

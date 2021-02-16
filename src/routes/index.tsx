@@ -1,17 +1,22 @@
 import React from 'react';
-import { Switch } from 'react-router-dom';
-import SignIn from '../pages/SignIn/index';
-import SignOut from '../pages/SignUp/index';
-import Dashboard from '../pages/Dashboard/index';
-import Route from './Routes';
+import { Switch, Route as RouteTest } from 'react-router-dom';
 
-const Routes: React.FC = () => (
-  <Switch>
-    <Route path="/" exact component={SignIn} />
-    <Route path="/signup" component={SignOut} />
-    <Route path="/dashboard" component={Dashboard} isPrivate />
-    {/* // se a rota tiver o "isPrivate" e o usuário não estiver logado ,ele redireciona para a rota de login */}
-  </Switch>
-);
+import Route from './Route';
+import SignIn from '../pages/SignIn';
+import SignUp from '../pages/SignUp';
+import ForgotPassword from '../pages/ForgotPassword';
+
+import Dashboard from '../pages/Dashboard';
+
+const Routes: React.FC = () => {
+  return (
+    <Switch>
+      <Route path="/" exact component={SignIn} />
+      <Route path="/dashboard" component={Dashboard} isPrivate />
+      <Route path="/signup" component={SignUp} />
+      <Route path="/forgot-password" component={ForgotPassword} />
+    </Switch>
+  );
+};
 
 export default Routes;
