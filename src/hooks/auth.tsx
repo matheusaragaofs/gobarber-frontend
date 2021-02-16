@@ -28,6 +28,7 @@ const AuthProvider: React.FC = ({ children }) => {
     const user = localStorage.getItem('@GoBarber:user');
 
     if (token && user) {
+      api.defaults.headers.authorization = `Bearer ${token}`; // quando o usuário dá f5 e quando ele loga (signIn) verificamos se o usuário está logado.
       return { token, user: JSON.parse(user) };
     }
     return {} as AuthState; // forçando uma tipagem pro objeto;
@@ -43,6 +44,8 @@ const AuthProvider: React.FC = ({ children }) => {
 
     localStorage.setItem('@GoBarber:token', token);
     localStorage.setItem('@GoBarber:user', JSON.stringify(user));
+
+    api.defaults.headers.authorization = `Bearer ${token}`; // 'vai se aplicar pra todas as requisições que acontencer daqui em diante
 
     setData({ token, user });
   }, []);
