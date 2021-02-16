@@ -50,6 +50,7 @@ const ResetPassword: React.FC = () => {
         const token = location.search.replace('?token=', '');
 
         if (!token) {
+          console.log(token);
           throw new Error();
         }
 
@@ -59,12 +60,11 @@ const ResetPassword: React.FC = () => {
           token,
         });
 
-        history.push('/signin');
+        history.push('/');
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           const errors = getValidationErrors(err);
           formRef.current?.setErrors(errors);
-          console.log(errors);
 
           return;
         }
