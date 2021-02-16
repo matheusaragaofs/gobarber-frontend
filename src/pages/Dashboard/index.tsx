@@ -5,6 +5,7 @@ import ptBr from 'date-fns/locale/pt-BR';
 import 'react-day-picker/lib/style.css'; // importando a estilização day picker
 import DayPicker, { DayModifiers } from 'react-day-picker';
 
+import { parseISO } from 'date-fns/esm';
 import logoImg from '../../assets/logo.svg';
 import { useAuth } from '../../hooks/auth';
 import {
@@ -29,6 +30,7 @@ interface MonthAvailabilityItem {
 interface Appointment {
   id: string;
   date: string;
+  hourFormatted: string;
   user: {
     name: string;
     avatar_url: string;
@@ -67,7 +69,7 @@ const Dashboard: React.FC = () => {
 
   useEffect(() => {
     api
-      .get('/appointments/me', {
+      .get<Appointment[]>('/appointments/me', {
         params: {
           day: selectedDate.getDate(),
           year: selectedDate.getFullYear(),
@@ -75,8 +77,13 @@ const Dashboard: React.FC = () => {
         },
       })
       .then(response => {
-        setappointments(response.data);
-        console.log(response.data);
+        const appointmentsFormatted = response.data.map(appointment => {
+          return {
+            ...appointment,
+            hourFormatted: format(parseISO(appointment.date), 'HH:mm'),
+          };
+        });
+        setappointments(appointmentsFormatted);
       });
   }, [selectedDate]);
 
@@ -100,6 +107,16 @@ const Dashboard: React.FC = () => {
     return format(selectedDate, 'cccc', { locale: ptBr });
   }, [selectedDate]);
 
+  const morningAppointments = useMemo(() => {
+    return appointments.filter(appointment => {
+      return parseISO(appointment.date).getHours() < 12;
+    });
+  }, [appointments]);
+  const afternoonAppointments = useMemo(() => {
+    return appointments.filter(appointment => {
+      return parseISO(appointment.date).getHours() >= 12;
+    });
+  }, [appointments]);
   return (
     <Container>
       <Header>
@@ -142,50 +159,40 @@ const Dashboard: React.FC = () => {
 
           <Section>
             <strong>Manhã</strong>
-            <Appointment>
-              <span>
-                <FiClock />
-                08:00
-              </span>
-              <div>
-                <img
-                  src="https://instagram.frec23-1.fna.fbcdn.net/v/t51.2885-19/s150x150/147450544_112699784136535_1255431336229930767_n.jpg?_nc_ht=instagram.frec23-1.fna.fbcdn.net&_nc_ohc=gBRCGeWHftsAX9-8FDr&tp=1&oh=f72e994a954a4a7c3de8bec00f43166d&oe=6056225C"
-                  alt="Matheus"
-                />
-                <strong>Matheus Aragão</strong>
-              </div>
-            </Appointment>
+            {morningAppointments.map(appointment => (
+              <Appointment key={appointment.id}>
+                <span>
+                  <FiClock />
+                  {appointment.hourFormatted}
+                </span>
+                <div>
+                  <img
+                    src="https://instagram.frec23-1.fna.fbcdn.net/v/t51.2885-19/s150x150/147450544_112699784136535_1255431336229930767_n.jpg?_nc_ht=instagram.frec23-1.fna.fbcdn.net&_nc_ohc=gBRCGeWHftsAX9-8FDr&tp=1&oh=f72e994a954a4a7c3de8bec00f43166d&oe=6056225C"
+                    alt="Matheus"
+                  />
+                  <strong>{appointment.user.name}</strong>
+                </div>
+              </Appointment>
+            ))}
           </Section>
 
           <Section>
             <strong>Tarde</strong>
-            <Appointment>
-              <span>
-                <FiClock />
-                08:00
-              </span>
-              <div>
-                <img
-                  src="https://instagram.frec23-1.fna.fbcdn.net/v/t51.2885-19/s150x150/147450544_112699784136535_1255431336229930767_n.jpg?_nc_ht=instagram.frec23-1.fna.fbcdn.net&_nc_ohc=gBRCGeWHftsAX9-8FDr&tp=1&oh=f72e994a954a4a7c3de8bec00f43166d&oe=6056225C"
-                  alt="Matheus"
-                />
-                <strong>Eduardo </strong>
-              </div>
-            </Appointment>
-
-            <Appointment>
-              <span>
-                <FiClock />
-                08:00
-              </span>
-              <div>
-                <img
-                  src="https://instagram.frec23-1.fna.fbcdn.net/v/t51.2885-19/s150x150/147450544_112699784136535_1255431336229930767_n.jpg?_nc_ht=instagram.frec23-1.fna.fbcdn.net&_nc_ohc=gBRCGeWHftsAX9-8FDr&tp=1&oh=f72e994a954a4a7c3de8bec00f43166d&oe=6056225C"
-                  alt="Matheus"
-                />
-                <strong>Arimin</strong>
-              </div>
-            </Appointment>
+            {afternoonAppointments.map(appointment => (
+              <Appointment key={appointment.id}>
+                <span>
+                  <FiClock />
+                  {appointment.hourFormatted}
+                </span>
+                <div>
+                  <img
+                    src={appointment.user.avatar_url}
+                    alt={appointment.user.name}
+                  />
+                  <strong>{appointment.user.name}</strong>
+                </div>
+              </Appointment>
+            ))}
           </Section>
         </Schedule>
         <Calendar>
