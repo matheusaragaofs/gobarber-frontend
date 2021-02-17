@@ -185,7 +185,9 @@ export const Calendar = styled.aside`
 
 export const Section = styled.section`
   margin-top: 48px;
-
+  > p {
+    color: #999591;
+  }
   > strong {
     color: #999591;
     font-size: 20px;
