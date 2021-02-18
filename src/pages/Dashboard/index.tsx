@@ -183,8 +183,8 @@ const Dashboard: React.FC = () => {
                 </span>
                 <div>
                   <img
-                    src="https://instagram.frec23-1.fna.fbcdn.net/v/t51.2885-19/s150x150/147450544_112699784136535_1255431336229930767_n.jpg?_nc_ht=instagram.frec23-1.fna.fbcdn.net&_nc_ohc=gBRCGeWHftsAX9-8FDr&tp=1&oh=f72e994a954a4a7c3de8bec00f43166d&oe=6056225C"
-                    alt="Matheus"
+                    src={appointment.user.avatar_url}
+                    alt={appointment.user.name}
                   />
                   <strong>{appointment.user.name}</strong>
                 </div>
