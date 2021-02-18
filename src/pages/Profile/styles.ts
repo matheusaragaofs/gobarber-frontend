@@ -18,6 +18,10 @@ export const Container = styled.div`
         color: #999591;
         width: 24px;
         height: 24px;
+        transition: color 0.2s;
+        &:hover {
+          color: #ff9000;
+        }
       }
     }
   }

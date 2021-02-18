@@ -9,6 +9,7 @@ const App: React.FunctionComponent = () => (
     <AppProvider>
       <Routes />
     </AppProvider>
+
     <GlobalStyle />
   </Router>
 );

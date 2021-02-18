@@ -21,12 +21,15 @@ export const HeaderContent = styled.div`
     margin-left: auto; // fazer ele ocupar todo o espaço possível, da esquerda dele com margem.
     background: transparent;
     border: 0;
-
-    svg {
-      //todo icone no react é um svg
-      color: #999591;
-      width: 20px;
-      height: 20px;
+  }
+  svg {
+    //todo icone no react é um svg
+    color: #999591;
+    width: 25px;
+    height: 25px;
+    transition: color 0.2s;
+    &:hover {
+      color: #e60000;
     }
   }
 `;
