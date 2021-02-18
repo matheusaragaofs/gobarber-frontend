@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
+import { render, fireEvent, waitFor } from '@testing-library/react';
 import SignIn from '../../pages/SignIn';
 
 // criar esse mock antes dos testes, para que todos possam receber esse mock e colocar o nome do modulo que eu quero mockar
@@ -18,8 +18,15 @@ jest.mock('react-router-dom', () => {
   };
 });
 
+jest.mock('../../hooks/auth.tsx', () => {
+  return {
+    useAuth: () => ({
+      signIn: jest.fn(), // forçando a função signIn ser uma função que não retorna nada
+    }),
+  };
+});
 describe('SignIn Page', () => {
-  it('should be able to sign in', () => {
+  it('should be able to sign in', async () => {
     const { getByPlaceholderText, getByText } = render(<SignIn />);
     // getByText , encontrar um elemento pelo conteudo que tem dentro dele, vou utilizar pra pegar o botão
 
@@ -34,7 +41,12 @@ describe('SignIn Page', () => {
 
     fireEvent.click(buttonElement); // disparar um click nesse botão
 
-    expect(mockedHistoryPush).toHaveBeenCalledWith('/dashboard');
+    await waitFor(() => {
+      // esse wait vai ficar executando esse expect até ele dá certo, por que lá no código do index.tsx, há funções assíncronas que demoram um tempo pra ser executada,  e esse history.push() é síncrono, então tem que forçar a sua espera para não dar erro;
+      // esse wait serve pra disparar alguma coisa que vai demorar alguma coisa pra acontecer...
+      expect(mockedHistoryPush).toHaveBeenCalledWith('/dashboard');
+    });
+
     // Quero que meu usuário preencha os inputs do formulário e ao clicar no botão, ele chame o history.push('/dashboard')
     // Que é a ação VISUAL final da nossa aplicação!
   });
