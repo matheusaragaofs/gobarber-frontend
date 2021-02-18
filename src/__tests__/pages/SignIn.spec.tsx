@@ -8,6 +8,17 @@ import SignIn from '../../pages/SignIn';
 // quando esse meu react-router-dom for importado dos nosso arquivos, o que é que eu quero retornar ?
 
 const mockedHistoryPush = jest.fn(); // criei uma variável pra que ela possa ser visível e nosso teste possa acessá-la. Pra saber quando o  history.push() for chamado. Por exemplo lá no meu código tem um history.push('/dasboard')
+const mockedSignIn = jest.fn();
+
+const mockedAddToast = jest.fn();
+
+jest.mock('../../hooks/toast', () => {
+  return {
+    useToast: () => ({
+      addToast: mockedAddToast,
+    }),
+  };
+});
 
 jest.mock('react-router-dom', () => {
   return {
@@ -21,11 +32,14 @@ jest.mock('react-router-dom', () => {
 jest.mock('../../hooks/auth.tsx', () => {
   return {
     useAuth: () => ({
-      signIn: jest.fn(), // forçando a função signIn ser uma função que não retorna nada
+      signIn: mockedSignIn, // forçando a função signIn ser uma função que não retorna nada
     }),
   };
 });
 describe('SignIn Page', () => {
+  beforeEach(() => {
+    mockedHistoryPush.mockClear(); // pra nao ter que reutilizar essa variável a cada teste, ele vai limpar ela a cada teste
+  });
   it('should be able to sign in', async () => {
     const { getByPlaceholderText, getByText } = render(<SignIn />);
     // getByText , encontrar um elemento pelo conteudo que tem dentro dele, vou utilizar pra pegar o botão
@@ -49,5 +63,43 @@ describe('SignIn Page', () => {
 
     // Quero que meu usuário preencha os inputs do formulário e ao clicar no botão, ele chame o history.push('/dashboard')
     // Que é a ação VISUAL final da nossa aplicação!
+  });
+  it('should not be able to sign in with invalid credentials', async () => {
+    const { getByPlaceholderText, getByText } = render(<SignIn />);
+
+    const emailField = getByPlaceholderText('E-mail');
+    const passwordField = getByPlaceholderText('Senha');
+    const buttonElement = getByText('Entrar');
+
+    fireEvent.change(emailField, { target: { value: 'not-valid-email' } });
+    fireEvent.change(passwordField, { target: { value: '123456' } });
+
+    fireEvent.click(buttonElement);
+
+    await waitFor(() => {
+      expect(mockedHistoryPush).not.toHaveBeenCalled();
+    });
+  });
+  it('should display an error if login fails', async () => {
+    const { getByPlaceholderText, getByText } = render(<SignIn />);
+
+    mockedSignIn.mockImplementation(() => {
+      throw new Error();
+    });
+
+    const emailField = getByPlaceholderText('E-mail');
+    const passwordField = getByPlaceholderText('Senha');
+    const buttonElement = getByText('Entrar');
+
+    fireEvent.change(emailField, { target: { value: 'johndoe@example.com' } });
+    fireEvent.change(passwordField, { target: { value: '123456' } });
+
+    fireEvent.click(buttonElement);
+
+    await waitFor(() => {
+      expect(mockedAddToast).toHaveBeenCalledWith(
+        expect.objectContaining({ type: 'error' }),
+      );
+    });
   });
 });
